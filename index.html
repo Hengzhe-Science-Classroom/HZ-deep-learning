@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning · Interactive</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <button id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+        <aside id="sidebar">
+            <div id="sidebar-header">
+                <h1>Deep Learning</h1>
+                <p class="author">Goodfellow, Bengio & Courville / Prince / d2l.ai</p>
+                <div id="progress-container">
+                    <div id="progress-bar"><div id="progress-fill"></div></div>
+                    <span id="progress-text">0%</span>
+                </div>
+            </div>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Search topics...">
+            </div>
+            <nav id="chapter-nav"></nav>
+            <div id="sidebar-footer"><p class="copyright-notice" style="font-size:0.7rem;color:#888;margin-top:12px;text-align:center;">&copy; 2026 Hengzhe Zhao · AGPL-3.0 &amp; Commercial</p>
+                <button id="reset-progress">Reset Progress</button>
+            </div>
+        </aside>
+        <main id="main-content">
+            <div id="welcome-screen">
+                <div class="welcome-hero">
+                    <h1>Deep Learning</h1>
+                    <h2>From Neural Network Foundations to Generative Models and Large Language Models</h2>
+                    <p class="welcome-description">
+                        An interactive journey through deep learning, from mathematical foundations
+                        and feedforward networks to transformers, diffusion models, and LLM alignment.
+                        Every concept brought to life with hands-on visualizations.
+                    </p>
+                </div>
+                <div class="roadmap">
+                    <h3>Course Roadmap</h3>
+                    <div class="roadmap-parts">
+                        <div class="roadmap-part">
+                            <h4>Part A: Mathematical Foundations</h4>
+                            <ul>
+                                <li>Ch 0: Linear Algebra Review</li>
+                                <li>Ch 1: Probability & Information Theory</li>
+                                <li>Ch 2: Numerical Computation & AutoDiff</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part B: Feedforward Networks</h4>
+                            <ul>
+                                <li>Ch 3: Perceptron & Linear Models</li>
+                                <li>Ch 4: Multilayer Perceptron</li>
+                                <li>Ch 5: Backpropagation</li>
+                                <li>Ch 6: Initialization & Normalization</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part C: Optimization & Regularization</h4>
+                            <ul>
+                                <li>Ch 7: Optimization Algorithms</li>
+                                <li>Ch 8: Regularization Techniques</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part D: Convolutional Neural Networks</h4>
+                            <ul>
+                                <li>Ch 9: Convolution Operations</li>
+                                <li>Ch 10: Classic CNN Architectures</li>
+                                <li>Ch 11: ResNet & Modern Architectures</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part E: Sequence Models</h4>
+                            <ul>
+                                <li>Ch 12: Recurrent Neural Networks</li>
+                                <li>Ch 13: LSTM & Gated Units</li>
+                                <li>Ch 14: Attention Mechanism</li>
+                                <li>Ch 15: Transformer Architecture</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part F: Generative Models</h4>
+                            <ul>
+                                <li>Ch 16: Autoencoders & VAE</li>
+                                <li>Ch 17: Generative Adversarial Networks</li>
+                                <li>Ch 18: Diffusion Models</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-part">
+                            <h4>Part G: LLMs & Frontiers</h4>
+                            <ul>
+                                <li>Ch 19: Pretrained Language Models</li>
+                                <li>Ch 20: Instruction Tuning & Alignment</li>
+                                <li>Ch 21: Vision & Multimodal Frontiers</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="welcome-start">Select a chapter from the sidebar to begin your journey!</p>
+            </div>
+            <div id="chapter-content" style="display:none;">
+                <div id="chapter-header">
+                    <div id="chapter-number-badge"></div>
+                    <h1 id="chapter-title"></h1>
+                    <p id="chapter-subtitle"></p>
+                </div>
+                <div id="section-tabs"></div>
+                <article id="section-content"></article>
+                <div id="exercises-panel" style="display:none;">
+                    <h3>Practice Time!</h3>
+                    <div id="exercises-list"></div>
+                </div>
+                <div id="chapter-nav-buttons">
+                    <button id="prev-btn" disabled>&larr; Previous</button>
+                    <span id="section-indicator"></span>
+                    <button id="next-btn">Next &rarr;</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="viz-engine.js"></script>
+
+    <!-- Chapter manifest for lazy loading -->
+    <script>
+    window.CHAPTER_MANIFEST = [
+        {number:0,  id:'ch00', title:'Linear Algebra Review',               file:'ch00-linear-algebra-review'},
+        {number:1,  id:'ch01', title:'Probability & Information Theory',     file:'ch01-probability-information'},
+        {number:2,  id:'ch02', title:'Numerical Computation & AutoDiff',     file:'ch02-numerical-autodiff'},
+        {number:3,  id:'ch03', title:'Perceptron & Linear Models',           file:'ch03-perceptron-linear'},
+        {number:4,  id:'ch04', title:'Multilayer Perceptron',                file:'ch04-multilayer-perceptron'},
+        {number:5,  id:'ch05', title:'Backpropagation',                      file:'ch05-backpropagation'},
+        {number:6,  id:'ch06', title:'Initialization & Normalization',       file:'ch06-init-normalization'},
+        {number:7,  id:'ch07', title:'Optimization Algorithms',              file:'ch07-optimization'},
+        {number:8,  id:'ch08', title:'Regularization Techniques',            file:'ch08-regularization'},
+        {number:9,  id:'ch09', title:'Convolution Operations',               file:'ch09-convolution'},
+        {number:10, id:'ch10', title:'Classic CNN Architectures',            file:'ch10-classic-cnn'},
+        {number:11, id:'ch11', title:'ResNet & Modern Architectures',        file:'ch11-resnet-modern'},
+        {number:12, id:'ch12', title:'Recurrent Neural Networks',            file:'ch12-rnn'},
+        {number:13, id:'ch13', title:'LSTM & Gated Units',                   file:'ch13-lstm-gru'},
+        {number:14, id:'ch14', title:'Attention Mechanism',                  file:'ch14-attention'},
+        {number:15, id:'ch15', title:'Transformer Architecture',             file:'ch15-transformer'},
+        {number:16, id:'ch16', title:'Autoencoders & VAE',                   file:'ch16-autoencoder-vae'},
+        {number:17, id:'ch17', title:'Generative Adversarial Networks',      file:'ch17-gan'},
+        {number:18, id:'ch18', title:'Diffusion Models',                     file:'ch18-diffusion'},
+        {number:19, id:'ch19', title:'Pretrained Language Models',           file:'ch19-pretrained-lm'},
+        {number:20, id:'ch20', title:'Instruction Tuning & Alignment',       file:'ch20-alignment'},
+        {number:21, id:'ch21', title:'Vision & Multimodal Frontiers',        file:'ch21-vision-multimodal'}
+    ];
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
